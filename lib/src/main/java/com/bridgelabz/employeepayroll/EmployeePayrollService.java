@@ -36,6 +36,13 @@ public class EmployeePayrollService {
 			new EmployeePayrollFileIOService().printData();
 		}
 	}
+	
+	public long countEntries(IOService ioService) {
+		if(ioService.equals(IOService.FILE_IO)) {
+			return new EmployeePayrollFileIOService().countEntries();
+		}
+		return 0;
+	}
 	public static void main(String[] args) {
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
 		Scanner consoleInputReader=new Scanner(System.in);
