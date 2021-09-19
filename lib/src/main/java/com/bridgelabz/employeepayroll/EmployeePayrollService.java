@@ -11,7 +11,10 @@ public class EmployeePayrollService {
 	private List<EmployeePayrollData> employeePayrollList;
 	
 	public EmployeePayrollService() {
-		this.employeePayrollList=new ArrayList<EmployeePayrollData>();
+		
+	}	
+	public EmployeePayrollService(List<EmployeePayrollData> employeePayrollList) {
+		this.employeePayrollList = employeePayrollList;
 	}
 
 	public void readEmployeePayrollData(Scanner consoleInputReader) {
@@ -44,7 +47,8 @@ public class EmployeePayrollService {
 		return 0;
 	}
 	public static void main(String[] args) {
-		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
+		ArrayList<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService(employeePayrollList);
 		Scanner consoleInputReader=new Scanner(System.in);
 		employeePayrollService.readEmployeePayrollData(consoleInputReader);	
 		employeePayrollService.writeEmployeePayrollData(IOService.FILE_IO);

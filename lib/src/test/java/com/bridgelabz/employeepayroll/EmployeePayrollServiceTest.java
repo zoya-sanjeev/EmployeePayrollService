@@ -14,10 +14,11 @@ public class EmployeePayrollServiceTest {
 				new EmployeePayrollData(2,"Bill Gates", 5000.0),
 				new EmployeePayrollData(3,"Mark Zuckerberg", 3000.0)
 		};
-		EmployeePayrollService employeePayService=new EmployeePayrollService();
-		employeePayService=(EmployeePayrollService) Arrays.asList(arrayOfEmployees);
-		employeePayService.writeEmployeePayrollData(IOService.FILE_IO);
-		long entries = employeePayService.countEntries(IOService.FILE_IO);
+		EmployeePayrollService employeePayrollService;
+		employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmployees));
+		employeePayrollService.writeEmployeePayrollData(IOService.FILE_IO);
+		employeePayrollService.printData(IOService.FILE_IO);
+		long entries = employeePayrollService.countEntries(IOService.FILE_IO);
 		Assert.assertEquals(3, entries);
 	}
 }
