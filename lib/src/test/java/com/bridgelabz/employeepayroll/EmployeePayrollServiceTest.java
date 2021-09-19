@@ -22,4 +22,8 @@ public class EmployeePayrollServiceTest {
 		Assert.assertEquals(3, entries);
 	}
 	
+	@Test public void givenFilesOnReadingFromFilesShouldMatchEmployeeCount() {
+		EmployeePayrollService employeePayrollService=new EmployeePayrollService();
+		long entries=employeePayrollService.readEmployeePayrollData(IOService.FILE_IO);
+	}
 }
