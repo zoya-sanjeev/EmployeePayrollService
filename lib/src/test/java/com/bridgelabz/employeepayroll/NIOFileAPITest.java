@@ -19,7 +19,14 @@ public class NIOFileAPITest {
 	private static String PLAY_WITH_NIO="TempPlayGround";
 	
     @Test public void givenPath_performFileOperations_Confirm() {
-        Path homePath=Paths.get(HOME);
+        //Check file Exists
+    	Path homePath=Paths.get(HOME);
         Assert.assertTrue(Files.exists(homePath));
+        
+        //Delete File and Check File Not Exist
+        Path playPath=Paths.get(HOME+"/"+PLAY_WITH_NIO);
+        if(Files.exists(playPath))
+        	FileUtils.deleteFiles(playPath.toFile());
+        Assert.assertTrue(Files.notExists(playPath));
     }
 }
