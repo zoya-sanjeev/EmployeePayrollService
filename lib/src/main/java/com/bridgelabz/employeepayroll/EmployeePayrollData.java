@@ -3,8 +3,6 @@
  */
 package com.bridgelabz.employeepayroll;
 
-public class Library {
-    public boolean someLibraryMethod() {
-        return true;
-    }
+public class EmployeePayrollData {
+	
 }

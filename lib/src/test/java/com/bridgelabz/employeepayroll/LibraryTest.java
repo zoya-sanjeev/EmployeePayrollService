@@ -5,13 +5,13 @@ package com.bridgelabz.employeepayroll;
 
 import org.junit.Test;
 
-import com.bridgelabz.employeepayroll.Library;
+import com.bridgelabz.employeepayroll.EmployeePayrollData;
 
 import static org.junit.Assert.*;
 
 public class LibraryTest {
     @Test public void testSomeLibraryMethod() {
-        Library classUnderTest = new Library();
+        EmployeePayrollData classUnderTest = new EmployeePayrollData();
         assertTrue("someLibraryMethod should return 'true'", classUnderTest.someLibraryMethod());
     }
 }
