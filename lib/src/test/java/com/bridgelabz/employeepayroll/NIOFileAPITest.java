@@ -10,6 +10,7 @@ import com.bridgelabz.employeepayroll.EmployeePayrollData;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,5 +29,13 @@ public class NIOFileAPITest {
         if(Files.exists(playPath))
         	FileUtils.deleteFiles(playPath.toFile());
         Assert.assertTrue(Files.notExists(playPath));
+        
+        //Create Directory
+        try {
+			Files.createDirectories(playPath);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        Assert.assertTrue(Files.exists(playPath));
     }
 }
