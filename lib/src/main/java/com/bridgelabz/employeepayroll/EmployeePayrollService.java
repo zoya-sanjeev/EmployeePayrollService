@@ -27,13 +27,14 @@ public class EmployeePayrollService {
 	private void writeEmployeePayrollData(EmployeePayrollService.IOService ioservice) {
 		if(ioservice==IOService.CONSOLE_IO)
 			System.out.println("Writing employee data \n"+ employeePayrollList);
-
+		else if(ioservice==IOService.FILE_IO)
+			new EmployeePayrollFileIOService().writeData(employeePayrollList);
 	}
 	public static void main(String[] args) {
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
 		Scanner consoleInputReader=new Scanner(System.in);
 		employeePayrollService.readEmployeePayrollData(consoleInputReader);	
-		employeePayrollService.writeEmployeePayrollData(IOService.CONSOLE_IO);
+		employeePayrollService.writeEmployeePayrollData(IOService.FILE_IO);
 	}
 
 }
