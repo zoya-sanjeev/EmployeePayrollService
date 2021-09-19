@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.IntStream;
 
 public class NIOFileAPITest {
 	private static String HOME = System.getProperty("user.home");
@@ -37,5 +38,16 @@ public class NIOFileAPITest {
 			e.printStackTrace();
 		}
         Assert.assertTrue(Files.exists(playPath));
+        
+        //Create File
+        IntStream.range(1, 10).forEach(counter -> {
+        	Path tempFile=Paths.get(playPath + "/temp"+counter);
+        	Assert.assertTrue(Files.notExists(tempFile));
+        	try {
+        		Files.createFile(tempFile);
+        	}catch(IOException e) {
+        		Assert.assertTrue(Files.exists(tempFile));
+        	}
+        });
     }
 }
