@@ -21,11 +21,15 @@ public class EmployeePayrollService {
 		Double salary =consoleInputReader.nextDouble();
 		employeePayrollList.add(new EmployeePayrollData(id, name, salary));
 	}
+	
+	private void writeEmployeePayrollData() {
+		System.out.println("Writing employee data \n"+ employeePayrollList);
+	}
 	public static void main(String[] args) {
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
 		Scanner consoleInputReader=new Scanner(System.in);
-		
-
+		employeePayrollService.readEmployeePayrollData(consoleInputReader);	
+		employeePayrollService.writeEmployeePayrollData();
 	}
 
 }
