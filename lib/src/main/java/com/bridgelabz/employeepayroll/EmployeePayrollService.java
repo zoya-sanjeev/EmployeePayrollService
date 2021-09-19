@@ -14,7 +14,7 @@ public class EmployeePayrollService {
 		this.employeePayrollList=new ArrayList<EmployeePayrollData>();
 	}
 
-	private void readEmployeePayrollData(Scanner consoleInputReader) {
+	public void readEmployeePayrollData(Scanner consoleInputReader) {
 		System.out.println("Enter Employee ID");
 		int id=consoleInputReader.nextInt();
 		System.out.println("Enter employee name");
@@ -24,7 +24,7 @@ public class EmployeePayrollService {
 		employeePayrollList.add(new EmployeePayrollData(id, name, salary));
 	}
 	
-	private void writeEmployeePayrollData(EmployeePayrollService.IOService ioservice) {
+	public void writeEmployeePayrollData(EmployeePayrollService.IOService ioservice) {
 		if(ioservice==IOService.CONSOLE_IO)
 			System.out.println("Writing employee data \n"+ employeePayrollList);
 		else if(ioservice==IOService.FILE_IO)
