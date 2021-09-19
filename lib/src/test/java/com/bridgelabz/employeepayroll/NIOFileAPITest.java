@@ -20,7 +20,7 @@ public class NIOFileAPITest {
 	private static String HOME = System.getProperty("user.home");
 	private static String PLAY_WITH_NIO="TempPlayGround";
 	
-    @Test public void givenPath_performFileOperations_Confirm() {
+    @Test public void givenPath_performFileOperations_Confirm() throws IOException {
         //Check file Exists
     	Path homePath=Paths.get(HOME);
         Assert.assertTrue(Files.exists(homePath));
@@ -32,11 +32,7 @@ public class NIOFileAPITest {
         Assert.assertTrue(Files.notExists(playPath));
         
         //Create Directory
-        try {
-			Files.createDirectories(playPath);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Files.createDirectories(playPath);
         Assert.assertTrue(Files.exists(playPath));
         
         //Create File
@@ -49,5 +45,13 @@ public class NIOFileAPITest {
         		Assert.assertTrue(Files.exists(tempFile));
         	}
         });
+        
+        //List files, directories
+        
+        Files.list(playPath).filter(Files:: isRegularFile).forEach(System.out :: println);
+        Files.newDirectoryStream(playPath).forEach(System.out :: println );
+        Files.newDirectoryStream(playPath, path->path.toFile().isFile() && 
+        									path.toString().startsWith("temp"))
+        									.forEach(System.out:: println);
     }
 }
