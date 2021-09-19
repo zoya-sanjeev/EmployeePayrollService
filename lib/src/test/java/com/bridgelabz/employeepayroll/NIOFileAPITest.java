@@ -3,12 +3,14 @@
  */
 package com.bridgelabz.employeepayroll;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.bridgelabz.employeepayroll.EmployeePayrollData;
 
 import static org.junit.Assert.*;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -18,6 +20,6 @@ public class NIOFileAPITest {
 	
     @Test public void givenPath_performFileOperations_Confirm() {
         Path homePath=Paths.get(HOME);
-        
+        Assert.assertTrue(Files.exists(homePath));
     }
 }
