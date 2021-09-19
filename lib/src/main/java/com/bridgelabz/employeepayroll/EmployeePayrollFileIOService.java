@@ -3,6 +3,7 @@ package com.bridgelabz.employeepayroll;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.nio.file.Files;
 
@@ -21,6 +22,17 @@ public class EmployeePayrollFileIOService {
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+	public List<EmployeePayrollData> readData(){
+		List<EmployeePayrollData> employeePayrollList=new ArrayList<EmployeePayrollData>();
+		try {
+			Files.lines(new File(PAYROLL_FILE_NAME).toPath())
+			.map(line-> line.trim())
+			.forEach(line -> System.out.println(line));
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		return employeePayrollList;
 	}
 
 	public void printData() {
