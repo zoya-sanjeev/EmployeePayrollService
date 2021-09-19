@@ -30,6 +30,12 @@ public class EmployeePayrollService {
 		else if(ioservice==IOService.FILE_IO)
 			new EmployeePayrollFileIOService().writeData(employeePayrollList);
 	}
+	
+	public void printData(IOService ioService) {
+		if(ioService.equals(IOService.FILE_IO)) {
+			new EmployeePayrollFileIOService().printData();
+		}
+	}
 	public static void main(String[] args) {
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
 		Scanner consoleInputReader=new Scanner(System.in);
