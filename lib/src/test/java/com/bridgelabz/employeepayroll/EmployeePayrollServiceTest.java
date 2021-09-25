@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import com.bridgelabz.employeepayroll.EmployeePayrollService.IOService;
 
+import java.sql.SQLException;
 import java.util.*;
 public class EmployeePayrollServiceTest {
 	
@@ -26,5 +27,11 @@ public class EmployeePayrollServiceTest {
 		
 		EmployeePayrollService employeePayrollService=new EmployeePayrollService();
 		long entries=employeePayrollService.readEmployeePayrollData(IOService.FILE_IO);
+	}
+	@Test
+	public void givenEmployeePayrollInDB_WhenRetrieved_ShouldMatchEmployeeCount() throws SQLException {
+		EmployeePayrollService employeePayrollService=new EmployeePayrollService();
+		List<EmployeePayrollData> employeePayrollData= employeePayrollService.readEmployeePayrollDBData(IOService.DB_IO);
+		Assert.assertEquals(3, employeePayrollData.size());
 	}
 }
