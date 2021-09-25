@@ -1,6 +1,9 @@
 package com.bridgelabz.employeepayroll;
 
 import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.util.Enumeration;
 
 public class DBDemo {
 	
@@ -15,6 +18,16 @@ public class DBDemo {
 		}catch(ClassNotFoundException e) {
 			throw new IllegalStateException("lol",e);
 		}
+		listDrivers();
+	}
+
+	private static void listDrivers() {
+		Enumeration<Driver> driverList = DriverManager.getDrivers();
+		while(driverList.hasMoreElements()) {
+			Driver driverClass = (Driver) driverList.nextElement();
+			System.out.println(" "+driverClass.getClass().getName());
+		}
+		
 	}
 
 }
