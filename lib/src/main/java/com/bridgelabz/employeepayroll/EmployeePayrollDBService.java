@@ -2,6 +2,7 @@ package com.bridgelabz.employeepayroll;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,6 +11,18 @@ import java.util.List;
 
 public class EmployeePayrollDBService {
 	
+	private static EmployeePayrollDBService employeePayrollDBService;
+	private PreparedStatement employeePayrollStatement;
+	
+	private EmployeePayrollDBService() {
+		
+	}
+	public static EmployeePayrollDBService getInstance() {
+		if(employeePayrollDBService == null)
+			employeePayrollDBService = new EmployeePayrollDBService();
+		return employeePayrollDBService;
+	}
+
 	private Connection getConnection() throws SQLException {
 		String jdbcURL="jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
 		String userName="root";
@@ -56,6 +69,47 @@ public class EmployeePayrollDBService {
 		}
 		return 0;
 	}
+
+	public List<EmployeePayrollData> getEmployeePayrollData(String name) {
+		List<EmployeePayrollData> employeePayrollList=null;
+		if(this.employeePayrollStatement == null)
+			this.prepareStatementForEmployeeData();
+		try {
+			employeePayrollStatement.setString(1, name);
+			ResultSet resultSet = employeePayrollStatement.executeQuery();
+			employeePayrollList= this.getEmployeePayrollData(resultSet);
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return employeePayrollList;
+	}
+	private List<EmployeePayrollData> getEmployeePayrollData(ResultSet resultSet) {
+		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+		try {
+			while(resultSet.next()) {
+				int id = resultSet.getInt("employee_id");
+				String name = resultSet.getString("employee_name");
+				Double salary=resultSet.getDouble("basic_pay");
+				employeePayrollList.add(new EmployeePayrollData(id, name, salary)); 
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return employeePayrollList;
+	}
+	private void prepareStatementForEmployeeData() {
+		try {
+			Connection connection =this.getConnection();
+			String sql = "select p.employee_id, e.employee_name, p.basic_pay "
+					+ " from employee e, payroll p"
+					+ " where e.employee_id=p.employee_id and e.employee_name=?";
+			employeePayrollStatement=connection.prepareStatement(sql);
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 
 
 }
