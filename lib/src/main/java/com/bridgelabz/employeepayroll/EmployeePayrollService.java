@@ -1,5 +1,6 @@
 package com.bridgelabz.employeepayroll;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -16,7 +17,7 @@ public class EmployeePayrollService {
 	public EmployeePayrollService(List<EmployeePayrollData> employeePayrollList) {
 		this.employeePayrollList = employeePayrollList;
 	}
-	/**
+	
 	public void readEmployeePayrollData(Scanner consoleInputReader) {
 		System.out.println("Enter Employee ID");
 		int id=consoleInputReader.nextInt();
@@ -26,7 +27,13 @@ public class EmployeePayrollService {
 		Double salary =consoleInputReader.nextDouble();
 		employeePayrollList.add(new EmployeePayrollData(id, name, salary));
 	}
-	**/
+	
+	public List<EmployeePayrollData> readEmployeePayrollDBData(IOService ioService) throws SQLException{
+		if(ioService.equals(IOService.DB_IO))
+			this.employeePayrollList = new EmployeePayrollDBService().readData();
+		return this.employeePayrollList;
+	}
+
 	public void writeEmployeePayrollData(EmployeePayrollService.IOService ioservice) {
 		if(ioservice==IOService.CONSOLE_IO)
 			System.out.println("Writing employee data \n"+ employeePayrollList);
@@ -55,8 +62,8 @@ public class EmployeePayrollService {
 		ArrayList<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService(employeePayrollList);
 		Scanner consoleInputReader=new Scanner(System.in);
-		employeePayrollService.readEmployeePayrollData(IOService.FILE_IO);	
-		employeePayrollService.writeEmployeePayrollData(IOService.FILE_IO);
+		employeePayrollService.readEmployeePayrollData(consoleInputReader);	
+		employeePayrollService.writeEmployeePayrollData(IOService.CONSOLE_IO);
 	}
 
 }
