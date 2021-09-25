@@ -33,6 +33,10 @@ public class EmployeePayrollService {
 			this.employeePayrollList = new EmployeePayrollDBService().readData();
 		return this.employeePayrollList;
 	}
+	public void updateEmployeeSalary(String name, double salary) {
+		
+		
+	}
 
 	public void writeEmployeePayrollData(EmployeePayrollService.IOService ioservice) {
 		if(ioservice==IOService.CONSOLE_IO)
@@ -65,5 +69,6 @@ public class EmployeePayrollService {
 		employeePayrollService.readEmployeePayrollData(consoleInputReader);	
 		employeePayrollService.writeEmployeePayrollData(IOService.CONSOLE_IO);
 	}
+	
 
 }
