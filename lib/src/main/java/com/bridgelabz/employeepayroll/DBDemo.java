@@ -11,7 +11,7 @@ public class DBDemo {
 		String jdbcURL="jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
 		String userName="root";
 		String password="abcd1234";
-		Connection con;
+		Connection connection;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			System.out.println("Driver loaded!");
@@ -19,6 +19,13 @@ public class DBDemo {
 			throw new IllegalStateException("lol",e);
 		}
 		listDrivers();
+		try {
+			System.out.println("Connecting to database"+ jdbcURL);
+			connection=DriverManager.getConnection(jdbcURL,userName,password);
+			System.out.println("Connection is successfull"+ connection);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static void listDrivers() {
