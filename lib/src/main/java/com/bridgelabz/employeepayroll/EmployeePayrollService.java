@@ -34,7 +34,7 @@ public class EmployeePayrollService {
 		return this.employeePayrollList;
 	}
 	public void updateEmployeeSalary(String name, double salary) {
-		
+		int result =  new EmployeePayrollDBService().updateEmployeeData(name, salary);
 		
 	}
 
