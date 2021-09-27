@@ -72,47 +72,47 @@ public class EmployeePayrollServiceTest {
 	public void givenEmployeePayrollInDB_shouldReturnMinSalaryOfSalaryOfFemaleEmployees() throws SQLException{
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
 		char gender='F';
-		double sumOfSalary=employeePayrollService.getMinOfSalaryBasedOnGender(gender);
-		Assert.assertEquals(3000000.00, sumOfSalary, 0.0);
+		double minOfSalary=employeePayrollService.getMinOfSalaryBasedOnGender(gender);
+		Assert.assertEquals(3000000.00, minOfSalary, 0.0);
 	}
 	
 	@Test
 	public void givenEmployeePayrollInDB_shouldReturnMinSalaryOfSalaryOfMaleEmployees() throws SQLException{
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
 		char gender='M';
-		double sumOfSalary=employeePayrollService.getMinOfSalaryBasedOnGender(gender);
-		Assert.assertEquals(100000.00, sumOfSalary, 0.0);
+		double minOfSalary=employeePayrollService.getMinOfSalaryBasedOnGender(gender);
+		Assert.assertEquals(100000.00, minOfSalary, 0.0);
 	}
 	
 	@Test
 	public void givenEmployeePayrollInDB_shouldReturnMaxSalaryOfSalaryOfFemaleEmployees() throws SQLException{
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
 		char gender='F';
-		double sumOfSalary=employeePayrollService.getMaxOfSalaryBasedOnGender(gender);
-		Assert.assertEquals(3000000.00, sumOfSalary, 0.0);
+		double maxOfSalary=employeePayrollService.getMaxOfSalaryBasedOnGender(gender);
+		Assert.assertEquals(3000000.00, maxOfSalary, 0.0);
 	}
 	@Test
 	public void givenEmployeePayrollInDB_shouldReturnMaxSalaryOfSalaryOfMaleEmployees() throws SQLException{
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
 		char gender='M';
-		double sumOfSalary=employeePayrollService.getMaxOfSalaryBasedOnGender(gender);
-		Assert.assertEquals(300000.00, sumOfSalary, 0.0);
+		double maxOfSalary=employeePayrollService.getMaxOfSalaryBasedOnGender(gender);
+		Assert.assertEquals(300000.00, maxOfSalary, 0.0);
 	}
 	
 	@Test
 	public void givenEmployeePayrollInDB_shouldReturnAverageOfSalaryOfFemaleEmployees() throws SQLException{
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
 		char gender='F';
-		double sumOfSalary=employeePayrollService.getAverageOfSalaryBasedOnGender(gender);
-		Assert.assertEquals(3000000.00, sumOfSalary, 0.0);
+		double avgOfSalary=employeePayrollService.getAverageOfSalaryBasedOnGender(gender);
+		Assert.assertEquals(3000000.00, avgOfSalary, 0.0);
 	}
 	
 	@Test
 	public void givenEmployeePayrollInDB_shouldReturnAverageOfSalaryOfMaleEmployees() throws SQLException{
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
 		char gender='M';
-		double sumOfSalary=employeePayrollService.getAverageSumOfSalaryBasedOnGender(gender);
-		Assert.assertEquals(400000.00, sumOfSalary, 0.0);
+		double avgOfSalary=employeePayrollService.getAverageOfSalaryBasedOnGender(gender);
+		Assert.assertEquals(200000.00, avgOfSalary, 0.0);
 	}
 	
 }
