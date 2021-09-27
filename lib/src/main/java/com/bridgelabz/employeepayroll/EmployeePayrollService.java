@@ -107,6 +107,11 @@ public class EmployeePayrollService {
 		return maxOfSalaries;
 	}
 
+	public double getAverageOfSalaryBasedOnGender(char gender) {
+		double avgOfSalaries=employeePayollDBService.getAvgOfSalariesBasedOnGender(gender);
+		return avgOfSalaries;
+	}
+
 	
 
 }
