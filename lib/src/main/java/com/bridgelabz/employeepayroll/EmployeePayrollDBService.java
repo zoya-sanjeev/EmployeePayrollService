@@ -60,7 +60,7 @@ public class EmployeePayrollDBService {
 	}
 
 	private int updateEmployeeDataUsingStatement(String name, double salary) {
-		String sql=String.format("update payroll set salary= %.2f where employee_id = ( select employee_id from employee where employee_name ='%s';);", salary,name);
+		String sql=String.format("update payroll set basic_pay= %.2f where employee_id = ( select employee_id from employee where employee_name ='%s');", salary,name);
 		try(Connection connection =this.getConnection()) {
 			Statement statement = connection.createStatement();
 			return statement.executeUpdate(sql);
@@ -90,7 +90,7 @@ public class EmployeePayrollDBService {
 				int id = resultSet.getInt("employee_id");
 				String name = resultSet.getString("employee_name");
 				Double salary=resultSet.getDouble("basic_pay");
-				employeePayrollList.add(new EmployeePayrollData(id, name, salary)); 
+				employeePayrollList.add(new EmployeePayrollData(id, name, salary)); 		
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
