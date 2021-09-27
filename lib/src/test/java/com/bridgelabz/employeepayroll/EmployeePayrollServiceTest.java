@@ -67,4 +67,12 @@ public class EmployeePayrollServiceTest {
 		double sumOfSalary=employeePayrollService.getSumOfSalaryBasedOnGender(gender);
 		Assert.assertEquals(400000.00, sumOfSalary, 0.0);
 	}
+	
+	@Test
+	public void givenEmployeePayrollInDB_shouldReturnMinSalaryOfSalaryOfFemaleEmployees() throws SQLException{
+		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
+		char gender='F';
+		double sumOfSalary=employeePayrollService.getMinOfSalaryBasedOnGender(gender);
+		Assert.assertEquals(3000000.00, sumOfSalary, 0.0);
+	}
 }
