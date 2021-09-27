@@ -124,17 +124,42 @@ public class EmployeePayrollDBService {
 		
 	}
 	public double getSumOfSalariesBasedOnGender(char gender) {
-		String sql=String.format("select sum(p.basic_pay) from employee e, payroll p where e.employee_id=p.employee_id and e.gender='%c';", gender);
+		String sql=String.format("select e.gender, sum(p.basic_pay) from employee e, payroll p where e.employee_id=p.employee_id group by gender;;", gender);
 		double sumOfSalaries=0.0;
 		try(Connection connection =this.getConnection()) {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sql);
-			result.next();
-			sumOfSalaries=result.getDouble(1);
+			if(gender=='F') {
+				result.next();
+				sumOfSalaries=result.getDouble(2);
+			}else {
+				result.next();
+				result.next();
+				sumOfSalaries=result.getDouble(2);
+			}
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return sumOfSalaries;
+	}
+	public double getMinOfSalariesBasedOnGender(char gender) {
+		String sql=String.format("select e.gender, min(p.basic_pay) from employee e, payroll p where e.employee_id=p.employee_id group by gender;", gender);
+		double minOfSalaries=0.0;
+		try(Connection connection =this.getConnection()) {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			if(gender=='F') {
+				result.next();
+				minOfSalaries=result.getDouble(2);
+			}else {
+				result.next();
+				result.next();
+				minOfSalaries=result.getDouble(2);
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return minOfSalaries;
 	}
 	
 

@@ -97,6 +97,11 @@ public class EmployeePayrollService {
 		return sumOfSalaries;
 	}
 
+	public double getMinOfSalaryBasedOnGender(char gender) {
+		double minOfSalaries=employeePayollDBService.getMinOfSalariesBasedOnGender(gender);
+		return minOfSalaries;
+	}
+
 	
 
 }
