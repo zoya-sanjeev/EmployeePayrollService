@@ -1,11 +1,13 @@
 package com.bridgelabz.employeepayroll;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +37,7 @@ public class EmployeePayrollDBService {
 	}
 	
 	public List<EmployeePayrollData> readData() throws SQLException{
-		String sql = "select p.employee_id, e.employee_name, p.basic_pay "
+		String sql = "select p.employee_id, e.employee_name, p.basic_pay, e.start_date "
 				+ " from employee e, payroll p"
 				+ " where e.employee_id=p.employee_id";
 		List<EmployeePayrollData> employeePayrollList= new ArrayList<>();
@@ -46,7 +48,8 @@ public class EmployeePayrollDBService {
 				int id=result.getInt("employee_id");
 				String name = result.getString("employee_name");
 				Double salary=result.getDouble("basic_pay");
-				employeePayrollList.add(new EmployeePayrollData(id, name, salary));
+				LocalDate startDate=result.getDate("start_date").toLocalDate();
+				employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate));
 			}
 			
 		}catch(SQLException e) {

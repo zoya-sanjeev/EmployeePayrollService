@@ -86,6 +86,11 @@ public class EmployeePayrollService {
 		return employeePayrollDataList.get(0).equals(getEmployeePayrollData(name));
 		
 	}
+
+	public List<EmployeePayrollData> getEmployeesInGivenStartDateRange(String date) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 }
