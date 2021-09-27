@@ -1,6 +1,6 @@
 package com.bridgelabz.employeepayroll;
 
-public class EmployeePayrollException extends RuntimeException {
+public class EmployeePayrollException extends RuntimeException{
 	enum ExceptionType{
 		CONNECTION_FAILED,
 		INVALID_QUERY

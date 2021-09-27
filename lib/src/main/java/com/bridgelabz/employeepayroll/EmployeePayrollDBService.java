@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bridgelabz.employeepayroll.EmployeePayrollException.ExceptionType;
+
 public class EmployeePayrollDBService {
 	
 	private static EmployeePayrollDBService employeePayrollDBService;
@@ -25,18 +27,22 @@ public class EmployeePayrollDBService {
 		return employeePayrollDBService;
 	}
 
-	private Connection getConnection() throws SQLException {
-		String jdbcURL="jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
-		String userName="root";
-		String password="abcd1234";
+	private Connection getConnection() throws EmployeePayrollException {
 		Connection connection;
-		System.out.println("Connecting to database"+ jdbcURL);
-		connection=DriverManager.getConnection(jdbcURL,userName,password);
-		System.out.println("Connection is successfull"+ connection);
+		try {
+			String jdbcURL="jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
+			String userName="root";
+			String password="abcd1234";
+			System.out.println("Connecting to database"+ jdbcURL);
+			connection=DriverManager.getConnection(jdbcURL,userName,password);
+			System.out.println("Connection is successfull"+ connection);
+		}catch(SQLException e) {
+			throw new EmployeePayrollException(ExceptionType.CONNECTION_FAILED, "Connection Failed");
+		}
 		return connection;
 	}
 	
-	public List<EmployeePayrollData> readData() throws SQLException{
+	public List<EmployeePayrollData> readData() throws EmployeePayrollException{
 		String sql = "select p.employee_id, e.employee_name, p.basic_pay, e.start_date "
 				+ " from employee e, payroll p"
 				+ " where e.employee_id=p.employee_id";
@@ -47,7 +53,7 @@ public class EmployeePayrollDBService {
 			employeePayrollList= this.getEmployeePayrollData(result);
 			
 		}catch(SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.INVALID_QUERY, "Check query");
 		}
 		return employeePayrollList;
 	}
@@ -56,15 +62,14 @@ public class EmployeePayrollDBService {
 		return this.updateEmployeeDataUsingStatement(name,salary);
 	}
 
-	private int updateEmployeeDataUsingStatement(String name, double salary) {
+	private int updateEmployeeDataUsingStatement(String name, double salary) throws EmployeePayrollException{
 		String sql=String.format("update payroll set basic_pay= %.2f where employee_id = ( select employee_id from employee where employee_name ='%s');", salary,name);
 		try(Connection connection =this.getConnection()) {
 			Statement statement = connection.createStatement();
 			return statement.executeUpdate(sql);
 		}catch(SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.INVALID_QUERY, "Check query");
 		}
-		return 0;
 	}
 	
 	
@@ -98,7 +103,7 @@ public class EmployeePayrollDBService {
 		return employeePayrollList;
 	}
 	
-	public List<EmployeePayrollData> getEmployeesInGivenStartRange(String date) throws SQLException {
+	public List<EmployeePayrollData> getEmployeesInGivenStartRange(String date) throws EmployeePayrollException {
 		String sql=String.format("select e.employee_id, e.employee_name, p.basic_pay, e.start_date from employee e, payroll p where e.employee_id=p.employee_id and start_date between cast('%s' as date) and date(now());", date);
 		List<EmployeePayrollData>listOfEmployees=new ArrayList<>();
 		try(Connection connection =this.getConnection()) {
@@ -106,12 +111,12 @@ public class EmployeePayrollDBService {
 			ResultSet result = statement.executeQuery(sql);
 			listOfEmployees=this.getEmployeePayrollData(result);
 		}catch(SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.INVALID_QUERY, "Check query");
 		}
 		return listOfEmployees;
 	}
 	
-	private void prepareStatementForEmployeeData() {
+	private void prepareStatementForEmployeeData()throws EmployeePayrollException {
 		try {
 			Connection connection =this.getConnection();
 			String sql = "select p.employee_id, e.employee_name, p.basic_pay, e.start_date "
@@ -119,11 +124,11 @@ public class EmployeePayrollDBService {
 					+ " where e.employee_id=p.employee_id and e.employee_name=?";
 			employeePayrollStatement=connection.prepareStatement(sql);
 		}catch(SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.INVALID_QUERY, "Check query");
 		}
 		
 	}
-	public double getSumOfSalariesBasedOnGender(char gender) {
+	public double getSumOfSalariesBasedOnGender(char gender) throws EmployeePayrollException {
 		String sql=String.format("select e.gender, sum(p.basic_pay) from employee e, payroll p where e.employee_id=p.employee_id group by gender;;", gender);
 		double sumOfSalaries=0.0;
 		try(Connection connection =this.getConnection()) {
@@ -138,11 +143,11 @@ public class EmployeePayrollDBService {
 				sumOfSalaries=result.getDouble(2);
 			}
 		}catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.INVALID_QUERY, "Check query");
 		}
 		return sumOfSalaries;
 	}
-	public double getMinOfSalariesBasedOnGender(char gender) {
+	public double getMinOfSalariesBasedOnGender(char gender) throws EmployeePayrollException{
 		String sql=String.format("select e.gender, min(p.basic_pay) from employee e, payroll p where e.employee_id=p.employee_id group by gender;", gender);
 		double minOfSalaries=0.0;
 		try(Connection connection =this.getConnection()) {
@@ -157,11 +162,11 @@ public class EmployeePayrollDBService {
 				minOfSalaries=result.getDouble(2);
 			}
 		}catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.INVALID_QUERY, "Check query");
 		}
 		return minOfSalaries;
 	}
-	public double getMaxOfSalariesBasedOnGender(char gender) {
+	public double getMaxOfSalariesBasedOnGender(char gender) throws EmployeePayrollException{
 		String sql=String.format("select e.gender, max(p.basic_pay) from employee e, payroll p where e.employee_id=p.employee_id group by gender;", gender);
 		double maxOfSalaries=0.0;
 		try(Connection connection =this.getConnection()) {
@@ -176,11 +181,11 @@ public class EmployeePayrollDBService {
 				maxOfSalaries=result.getDouble(2);
 			}
 		}catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.INVALID_QUERY, "Check query");
 		}
 		return maxOfSalaries;
 	}
-	public double getAvgOfSalariesBasedOnGender(char gender) {
+	public double getAvgOfSalariesBasedOnGender(char gender) throws EmployeePayrollException{
 		String sql=String.format("select e.gender, avg(p.basic_pay) from employee e, payroll p where e.employee_id=p.employee_id group by gender;", gender);
 		double avgOfSalaries=0.0;
 		try(Connection connection =this.getConnection()) {
@@ -195,11 +200,11 @@ public class EmployeePayrollDBService {
 				avgOfSalaries=result.getDouble(2);
 			}
 		}catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.INVALID_QUERY, "Check query");
 		}
 		return avgOfSalaries;
 	}
-	public int getCountBasedOnGender(char gender) {
+	public int getCountBasedOnGender(char gender) throws EmployeePayrollException{
 		String sql=String.format("select gender, count(*) from employee e group by gender;", gender);
 		int countOfEmployees=0;
 		try(Connection connection =this.getConnection()) {
@@ -214,7 +219,7 @@ public class EmployeePayrollDBService {
 				countOfEmployees=result.getInt(2);
 			}
 		}catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(ExceptionType.INVALID_QUERY, "Check query");
 		}
 		return countOfEmployees;
 	}
