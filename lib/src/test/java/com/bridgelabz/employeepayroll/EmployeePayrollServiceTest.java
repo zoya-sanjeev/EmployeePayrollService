@@ -84,4 +84,12 @@ public class EmployeePayrollServiceTest {
 		Assert.assertEquals(100000.00, sumOfSalary, 0.0);
 	}
 	
+	@Test
+	public void givenEmployeePayrollInDB_shouldReturnMaxSalaryOfSalaryOfFemaleEmployees() throws SQLException{
+		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
+		char gender='F';
+		double sumOfSalary=employeePayrollService.getMaxOfSalaryBasedOnGender(gender);
+		Assert.assertEquals(3000000.00, sumOfSalary, 0.0);
+	}
+	
 }
