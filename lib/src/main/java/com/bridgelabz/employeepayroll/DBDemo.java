@@ -13,7 +13,7 @@ public class DBDemo {
 		String password="abcd1234";
 		Connection connection;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 			System.out.println("Driver loaded!");
 		}catch(ClassNotFoundException e) {
 			throw new IllegalStateException("lol",e);
