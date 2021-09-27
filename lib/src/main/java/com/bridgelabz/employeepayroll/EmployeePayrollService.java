@@ -50,6 +50,11 @@ public class EmployeePayrollService {
 				.findFirst()
 				.orElse(null);
 	}
+	
+	public List<EmployeePayrollData> getEmployeesInGivenStartDateRange(String date) {
+		List<EmployeePayrollData> employeesInGivenRange=employeePayollDBService.getEmployeesInGivenStartRange(date);
+		return employeesInGivenRange;
+	}
 	public void writeEmployeePayrollData(EmployeePayrollService.IOService ioservice) {
 		if(ioservice==IOService.CONSOLE_IO)
 			System.out.println("Writing employee data \n"+ employeePayrollList);
@@ -87,10 +92,6 @@ public class EmployeePayrollService {
 		
 	}
 
-	public List<EmployeePayrollData> getEmployeesInGivenStartDateRange(String date) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 
 }

@@ -44,13 +44,7 @@ public class EmployeePayrollDBService {
 		try(Connection connection =this.getConnection()) {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sql);
-			while(result.next()) {
-				int id=result.getInt("employee_id");
-				String name = result.getString("employee_name");
-				Double salary=result.getDouble("basic_pay");
-				LocalDate startDate=result.getDate("start_date").toLocalDate();
-				employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate));
-			}
+			employeePayrollList= this.getEmployeePayrollData(result);
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -72,6 +66,8 @@ public class EmployeePayrollDBService {
 		}
 		return 0;
 	}
+	
+	
 
 	public List<EmployeePayrollData> getEmployeePayrollData(String name) {
 		List<EmployeePayrollData> employeePayrollList=null;
@@ -93,17 +89,32 @@ public class EmployeePayrollDBService {
 				int id = resultSet.getInt("employee_id");
 				String name = resultSet.getString("employee_name");
 				Double salary=resultSet.getDouble("basic_pay");
-				employeePayrollList.add(new EmployeePayrollData(id, name, salary)); 		
+				LocalDate startDate=resultSet.getDate("start_date").toLocalDate();
+				employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate)); 		
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 		return employeePayrollList;
 	}
+	
+	public List<EmployeePayrollData> getEmployeesInGivenStartRange(String date) throws SQLException {
+		String sql=String.format("select e.employee_id, e.employee_name, p.basic_pay, e.start_date from employee e, payroll p where e.employee_id=p.employee_id and start_date between cast('%s' as date) and date(now());", date);
+		List<EmployeePayrollData>listOfEmployees=new ArrayList<>();
+		try(Connection connection =this.getConnection()) {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			listOfEmployees=this.getEmployeePayrollData(result);
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return listOfEmployees;
+	}
+	
 	private void prepareStatementForEmployeeData() {
 		try {
 			Connection connection =this.getConnection();
-			String sql = "select p.employee_id, e.employee_name, p.basic_pay "
+			String sql = "select p.employee_id, e.employee_name, p.basic_pay, e.start_date "
 					+ " from employee e, payroll p"
 					+ " where e.employee_id=p.employee_id and e.employee_name=?";
 			employeePayrollStatement=connection.prepareStatement(sql);
@@ -112,6 +123,7 @@ public class EmployeePayrollDBService {
 		}
 		
 	}
+	
 
 
 
