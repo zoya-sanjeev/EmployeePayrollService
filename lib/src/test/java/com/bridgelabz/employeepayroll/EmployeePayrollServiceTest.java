@@ -47,9 +47,16 @@ public class EmployeePayrollServiceTest {
 	@Test 
 	public void givenDateRangeForEmployee_WhenRetrieved_shouldMatchGivenCount() throws SQLException {
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
-		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollDBData(IOService.DB_IO);
 		String date="2018-01-01";
 		List<EmployeePayrollData> lisdtOfEmployeesInDateRange=employeePayrollService.getEmployeesInGivenStartDateRange(date);
 		Assert.assertEquals(3, lisdtOfEmployeesInDateRange.size());
+	}
+	
+	@Test
+	public void givenEmployeePayrollInDB_shouldReturnSumOfSalaryOfFemaleEmployees() throws SQLException{
+		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
+		char gender='F';
+		double sumOfSalary=employeePayrollService.getSumOfSalaryBasedOnGender(char);
+		Assert.assertEquals(3000000.00, sumOfSalary);
 	}
 }
