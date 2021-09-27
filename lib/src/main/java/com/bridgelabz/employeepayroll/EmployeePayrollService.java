@@ -92,6 +92,11 @@ public class EmployeePayrollService {
 		
 	}
 
+	public double getSumOfSalaryBasedOnGender(char gender) {
+		double sumOfSalaries=employeePayollDBService.getSumOfSalariesBasedOnGender(gender);
+		return sumOfSalaries;
+	}
+
 	
 
 }
