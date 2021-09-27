@@ -161,6 +161,25 @@ public class EmployeePayrollDBService {
 		}
 		return minOfSalaries;
 	}
+	public double getMaxOfSalariesBasedOnGender(char gender) {
+		String sql=String.format("select e.gender, max(p.basic_pay) from employee e, payroll p where e.employee_id=p.employee_id group by gender;", gender);
+		double maxOfSalaries=0.0;
+		try(Connection connection =this.getConnection()) {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			if(gender=='F') {
+				result.next();
+				maxOfSalaries=result.getDouble(2);
+			}else {
+				result.next();
+				result.next();
+				maxOfSalaries=result.getDouble(2);
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return maxOfSalaries;
+	}
 	
 
 

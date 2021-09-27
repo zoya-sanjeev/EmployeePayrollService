@@ -102,6 +102,11 @@ public class EmployeePayrollService {
 		return minOfSalaries;
 	}
 
+	public double getMaxOfSalaryBasedOnGender(char gender) {
+		double maxOfSalaries=employeePayollDBService.getMaxOfSalariesBasedOnGender(gender);
+		return maxOfSalaries;
+	}
+
 	
 
 }
