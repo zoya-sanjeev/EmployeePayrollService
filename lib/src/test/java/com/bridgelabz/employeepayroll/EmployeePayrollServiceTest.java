@@ -99,4 +99,20 @@ public class EmployeePayrollServiceTest {
 		Assert.assertEquals(300000.00, sumOfSalary, 0.0);
 	}
 	
+	@Test
+	public void givenEmployeePayrollInDB_shouldReturnAverageOfSalaryOfFemaleEmployees() throws SQLException{
+		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
+		char gender='F';
+		double sumOfSalary=employeePayrollService.getAverageOfSalaryBasedOnGender(gender);
+		Assert.assertEquals(3000000.00, sumOfSalary, 0.0);
+	}
+	
+	@Test
+	public void givenEmployeePayrollInDB_shouldReturnAverageOfSalaryOfMaleEmployees() throws SQLException{
+		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
+		char gender='M';
+		double sumOfSalary=employeePayrollService.getAverageSumOfSalaryBasedOnGender(gender);
+		Assert.assertEquals(400000.00, sumOfSalary, 0.0);
+	}
+	
 }
