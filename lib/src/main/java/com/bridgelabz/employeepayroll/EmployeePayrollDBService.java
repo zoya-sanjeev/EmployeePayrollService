@@ -129,7 +129,8 @@ public class EmployeePayrollDBService {
 		try(Connection connection =this.getConnection()) {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sql);
-			sumOfSalaries=result.getDouble(gender);
+			result.next();
+			sumOfSalaries=result.getDouble(1);
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
