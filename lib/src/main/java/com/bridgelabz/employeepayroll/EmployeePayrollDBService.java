@@ -199,6 +199,25 @@ public class EmployeePayrollDBService {
 		}
 		return avgOfSalaries;
 	}
+	public int getCountBasedOnGender(char gender) {
+		String sql=String.format("select gender, count(*) from employee e group by gender;", gender);
+		int countOfEmployees=0;
+		try(Connection connection =this.getConnection()) {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			if(gender=='F') {
+				result.next();
+				countOfEmployees=result.getInt(2);
+			}else {
+				result.next();
+				result.next();
+				countOfEmployees=result.getInt(2);
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return countOfEmployees;
+	}
 	
 
 

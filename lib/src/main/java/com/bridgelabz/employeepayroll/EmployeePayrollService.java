@@ -112,6 +112,11 @@ public class EmployeePayrollService {
 		return avgOfSalaries;
 	}
 
+	public int getCountBasedOnGender(char gender) {
+		int countOfSalaries=employeePayollDBService.getCountBasedOnGender(gender);
+		return countOfSalaries;
+	}
+
 	
 
 }
