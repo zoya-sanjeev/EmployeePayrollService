@@ -100,7 +100,7 @@ public class EmployeePayrollServiceTest {
 	}
 	
 	@Test
-	public void givenEmployeePayrollInDB_shouldReturnAverageOfSalaryOfFemaleEmployees() throws SQLException{
+	public void givenEmployeePayrollInDB_shouldReturnAverageSalaryOfFemaleEmployees() throws SQLException{
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
 		char gender='F';
 		double avgOfSalary=employeePayrollService.getAverageOfSalaryBasedOnGender(gender);
@@ -108,11 +108,25 @@ public class EmployeePayrollServiceTest {
 	}
 	
 	@Test
-	public void givenEmployeePayrollInDB_shouldReturnAverageOfSalaryOfMaleEmployees() throws SQLException{
+	public void givenEmployeePayrollInDB_shouldReturnAverageSalaryOfMaleEmployees() throws SQLException{
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
 		char gender='M';
 		double avgOfSalary=employeePayrollService.getAverageOfSalaryBasedOnGender(gender);
 		Assert.assertEquals(200000.00, avgOfSalary, 0.0);
+	}
+	@Test
+	public void givenEmployeePayrollInDB_shouldReturnCountOfFemaleEmployees() throws SQLException{
+		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
+		char gender='F';
+		int count=employeePayrollService.getCountBasedOnGender(gender);
+		Assert.assertEquals(1,count);
+	}
+	@Test
+	public void givenEmployeePayrollInDB_shouldReturnCountOfMaleEmployees() throws SQLException{
+		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
+		char gender='M';
+		int count=employeePayrollService.getCountBasedOnGender(gender);
+		Assert.assertEquals(2, count);
 	}
 	
 }
