@@ -51,7 +51,7 @@ public class EmployeePayrollService {
 				.orElse(null);
 	}
 	
-	public List<EmployeePayrollData> getEmployeesInGivenStartDateRange(String date) {
+	public List<EmployeePayrollData> getEmployeesInGivenStartDateRange(String date) throws SQLException {
 		List<EmployeePayrollData> employeesInGivenRange=employeePayollDBService.getEmployeesInGivenStartRange(date);
 		return employeesInGivenRange;
 	}
