@@ -96,7 +96,7 @@ public class EmployeePayrollServiceTest {
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
 		char gender='M';
 		double sumOfSalary=employeePayrollService.getMaxOfSalaryBasedOnGender(gender);
-		Assert.assertEquals(100000.00, sumOfSalary, 0.0);
+		Assert.assertEquals(300000.00, sumOfSalary, 0.0);
 	}
 	
 }
