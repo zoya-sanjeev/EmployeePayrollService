@@ -1,6 +1,8 @@
 package com.bridgelabz.employeepayroll;
 
 public class Address {
+	int contactId;
+	int addressId;
 	String address;
 	String city;
 	String state;
