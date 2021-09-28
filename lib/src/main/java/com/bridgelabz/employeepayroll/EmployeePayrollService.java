@@ -1,6 +1,7 @@
 package com.bridgelabz.employeepayroll;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -51,8 +52,8 @@ public class EmployeePayrollService {
 				.orElse(null);
 	}
 	
-	public List<EmployeePayrollData> getEmployeesInGivenStartDateRange(String date) throws SQLException {
-		List<EmployeePayrollData> employeesInGivenRange=employeePayollDBService.getEmployeesInGivenStartRange(date);
+	public List<EmployeePayrollData> getEmployeesInGivenStartDateRange(LocalDate startDate, LocalDate endDate) throws SQLException {
+		List<EmployeePayrollData> employeesInGivenRange=employeePayollDBService.getEmployeesInGivenStartRange(startDate,endDate);
 		return employeesInGivenRange;
 	}
 	public void writeEmployeePayrollData(EmployeePayrollService.IOService ioservice) {

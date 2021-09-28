@@ -21,12 +21,20 @@ public class EmployeePayrollDBService {
 	private EmployeePayrollDBService() {
 		
 	}
-	public static EmployeePayrollDBService getInstance() {
-		if(employeePayrollDBService == null)
-			employeePayrollDBService = new EmployeePayrollDBService();
-		return employeePayrollDBService;
+	
+	private void prepareStatementForEmployeeData()throws EmployeePayrollException {
+		try {
+			Connection connection =this.getConnection();
+			String sql = "select p.employee_id, e.employee_name, p.basic_pay, e.start_date "
+					+ " from employee e, payroll p"
+					+ " where e.employee_id=p.employee_id and e.employee_name=?";
+			employeePayrollStatement=connection.prepareStatement(sql);
+		}catch(SQLException e) {
+			throw new EmployeePayrollException(ExceptionType.INVALID_QUERY, "Check query");
+		}
+		
 	}
-
+	
 	private Connection getConnection() throws EmployeePayrollException {
 		Connection connection;
 		try {
@@ -40,6 +48,12 @@ public class EmployeePayrollDBService {
 			throw new EmployeePayrollException(ExceptionType.CONNECTION_FAILED, "Connection Failed");
 		}
 		return connection;
+	}
+	
+	public static EmployeePayrollDBService getInstance() {
+		if(employeePayrollDBService == null)
+			employeePayrollDBService = new EmployeePayrollDBService();
+		return employeePayrollDBService;
 	}
 	
 	public List<EmployeePayrollData> readData() throws EmployeePayrollException{
@@ -58,6 +72,38 @@ public class EmployeePayrollDBService {
 		return employeePayrollList;
 	}
 
+	public List<EmployeePayrollData> getEmployeePayrollData(String name) {
+		List<EmployeePayrollData> employeePayrollList=null;
+		if(this.employeePayrollStatement == null)
+			this.prepareStatementForEmployeeData();
+		try {
+			employeePayrollStatement.setString(1, name);
+			ResultSet resultSet = employeePayrollStatement.executeQuery();
+			employeePayrollList= this.getEmployeePayrollData(resultSet);
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return employeePayrollList;
+	}
+	
+
+	public List<EmployeePayrollData> getEmployeePayrollData(ResultSet resultSet) {
+		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+		try {
+			while(resultSet.next()) {
+				int id = resultSet.getInt("employee_id");
+				String name = resultSet.getString("employee_name");
+				Double salary=resultSet.getDouble("basic_pay");
+				LocalDate startDate=resultSet.getDate("start_date").toLocalDate();
+				employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate)); 		
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return employeePayrollList;
+	}
+	
+
 	public int updateEmployeeData(String name, double salary) {
 		return this.updateEmployeeDataUsingStatement(name,salary);
 	}
@@ -74,37 +120,8 @@ public class EmployeePayrollDBService {
 	
 	
 
-	public List<EmployeePayrollData> getEmployeePayrollData(String name) {
-		List<EmployeePayrollData> employeePayrollList=null;
-		if(this.employeePayrollStatement == null)
-			this.prepareStatementForEmployeeData();
-		try {
-			employeePayrollStatement.setString(1, name);
-			ResultSet resultSet = employeePayrollStatement.executeQuery();
-			employeePayrollList= this.getEmployeePayrollData(resultSet);
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return employeePayrollList;
-	}
-	private List<EmployeePayrollData> getEmployeePayrollData(ResultSet resultSet) {
-		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
-		try {
-			while(resultSet.next()) {
-				int id = resultSet.getInt("employee_id");
-				String name = resultSet.getString("employee_name");
-				Double salary=resultSet.getDouble("basic_pay");
-				LocalDate startDate=resultSet.getDate("start_date").toLocalDate();
-				employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate)); 		
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return employeePayrollList;
-	}
-	
-	public List<EmployeePayrollData> getEmployeesInGivenStartRange(String date) throws EmployeePayrollException {
-		String sql=String.format("select e.employee_id, e.employee_name, p.basic_pay, e.start_date from employee e, payroll p where e.employee_id=p.employee_id and start_date between cast('%s' as date) and date(now());", date);
+	public List<EmployeePayrollData> getEmployeesInGivenStartRange(LocalDate startDate, LocalDate endDate) throws EmployeePayrollException {
+		String sql=String.format("select e.employee_id, e.employee_name, p.basic_pay, e.start_date from employee e, payroll p where e.employee_id=p.employee_id and start_date between '%s' and '%s';",Date.valueOf(startDate), Date.valueOf(endDate) );
 		List<EmployeePayrollData>listOfEmployees=new ArrayList<>();
 		try(Connection connection =this.getConnection()) {
 			Statement statement = connection.createStatement();
@@ -116,18 +133,7 @@ public class EmployeePayrollDBService {
 		return listOfEmployees;
 	}
 	
-	private void prepareStatementForEmployeeData()throws EmployeePayrollException {
-		try {
-			Connection connection =this.getConnection();
-			String sql = "select p.employee_id, e.employee_name, p.basic_pay, e.start_date "
-					+ " from employee e, payroll p"
-					+ " where e.employee_id=p.employee_id and e.employee_name=?";
-			employeePayrollStatement=connection.prepareStatement(sql);
-		}catch(SQLException e) {
-			throw new EmployeePayrollException(ExceptionType.INVALID_QUERY, "Check query");
-		}
-		
-	}
+	
 	public double getSumOfSalariesBasedOnGender(char gender) throws EmployeePayrollException {
 		String sql=String.format("select e.gender, sum(p.basic_pay) from employee e, payroll p where e.employee_id=p.employee_id group by gender;;", gender);
 		double sumOfSalaries=0.0;

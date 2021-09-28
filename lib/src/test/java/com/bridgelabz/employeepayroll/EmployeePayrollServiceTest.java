@@ -6,6 +6,7 @@ import org.junit.Test;
 import com.bridgelabz.employeepayroll.EmployeePayrollService.IOService;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
 public class EmployeePayrollServiceTest {
 	
@@ -47,8 +48,9 @@ public class EmployeePayrollServiceTest {
 	@Test 
 	public void givenDateRangeForEmployee_WhenRetrieved_shouldMatchGivenCount() throws SQLException {
 		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
-		String date="2018-01-01";
-		List<EmployeePayrollData> lisdtOfEmployeesInDateRange=employeePayrollService.getEmployeesInGivenStartDateRange(date);
+		LocalDate startDate=LocalDate.of(2018, 01, 01);
+		LocalDate endDate=LocalDate.now();
+		List<EmployeePayrollData> lisdtOfEmployeesInDateRange=employeePayrollService.getEmployeesInGivenStartDateRange(startDate,endDate);
 		Assert.assertEquals(3, lisdtOfEmployeesInDateRange.size());
 	}
 	
