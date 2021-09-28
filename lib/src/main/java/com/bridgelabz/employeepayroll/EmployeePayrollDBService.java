@@ -249,8 +249,12 @@ public class EmployeePayrollDBService {
 		int employeeId = -1;
 		Connection connection = null;
 		EmployeePayrollData employeePayrollData = null;
-		connection = this.getConnection();
-		
+		try {
+			connection = this.getConnection();
+			connection.setAutoCommit(false);
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
 		try (Statement statement = connection.createStatement()){
 			
 			String sql = String.format("insert into employee_payroll (name, salary, start_date, gender ) VALUES ('%s', '%s', '%s', '%s');", name,salary, Date.valueOf(startDate), gender );
@@ -265,6 +269,12 @@ public class EmployeePayrollDBService {
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
+			try {
+				connection.rollback();
+				return employeePayrollData;
+			}catch (SQLException ex) {
+				ex.printStackTrace();
+			}
 		}
 		
 		try(Statement statement = connection.createStatement()){
@@ -283,6 +293,24 @@ public class EmployeePayrollDBService {
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
+			try {
+				connection.rollback();
+			}catch(SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+		try {
+			connection.commit();
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(connection!= null) {
+				try {
+					connection.close();
+				}catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return employeePayrollData;
 	}
