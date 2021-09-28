@@ -55,9 +55,7 @@ public class EmployeePayrollDBService {
 	}
 	
 	public List<EmployeePayrollData> readData() throws EmployeePayrollException{
-		String sql = "select p.employee_id, e.employee_name, p.basic_pay, e.start_date "
-				+ " from employee e, payroll p"
-				+ " where e.employee_id=p.employee_id";
+		String sql = "select * from employee_payroll;";
 		List<EmployeePayrollData> employeePayrollList= new ArrayList<>();
 		try(Connection connection =this.getConnection()) {
 			Statement statement = connection.createStatement();
@@ -107,7 +105,7 @@ public class EmployeePayrollDBService {
 	}
 
 	private int updateEmployeeDataUsingStatement(String name, double salary) throws EmployeePayrollException{
-		String sql=String.format("update payroll set basic_pay= %.2f where employee_id = ( select employee_id from employee where employee_name ='%s');", salary,name);
+		String sql=String.format("update employee_payroll set salary='%.2f' where name= '%s';", salary,name);
 		try(Connection connection =this.getConnection()) {
 			Statement statement = connection.createStatement();
 			return statement.executeUpdate(sql);
@@ -137,7 +135,7 @@ public class EmployeePayrollDBService {
 	}
 
 	public List<EmployeePayrollData> getEmployeesInGivenStartRange(LocalDate startDate, LocalDate endDate) throws EmployeePayrollException {
-		String sql=String.format("select e.employee_id, e.employee_name, p.basic_pay, e.start_date from employee e, payroll p where e.employee_id=p.employee_id and start_date between '%s' and '%s';",Date.valueOf(startDate), Date.valueOf(endDate) );
+		String sql=String.format("select * from employee_payroll where start_date between '%s' and '%s';",Date.valueOf(startDate), Date.valueOf(endDate) );
 		List<EmployeePayrollData>listOfEmployees=new ArrayList<>();
 		try(Connection connection =this.getConnection()) {
 			Statement statement = connection.createStatement();
