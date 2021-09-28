@@ -9,7 +9,12 @@ public class EmployeePayrollData {
 	public int id;
 	public String name;
 	public double salary;
-	LocalDate startDate;
+	public LocalDate startDate;
+	public char gender;
+	public PayrollDetails payroll;
+	public Address address;
+	public Company company;
+	
 	
 	public EmployeePayrollData(int id, String name, Double salary) {
 		this.id=id;
