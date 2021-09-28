@@ -25,7 +25,7 @@ public class EmployeePayrollDBService {
 	private void prepareStatementForEmployeeData()throws EmployeePayrollException {
 		try {
 			Connection connection =this.getConnection();
-			String sql = "select * from employee_payroll where name=?;";
+			String sql = "select * from employee_payroll join payroll_details where name=?;";
 			employeePayrollStatement=connection.prepareStatement(sql);
 		}catch(SQLException e) {
 			throw new EmployeePayrollException(ExceptionType.INVALID_QUERY, "Check query");
@@ -105,7 +105,7 @@ public class EmployeePayrollDBService {
 	}
 
 	private int updateEmployeeDataUsingStatement(String name, double salary) throws EmployeePayrollException{
-		String sql=String.format("update employee_payroll set salary='%.2f' where name= '%s';", salary,name);
+		String sql=String.format(" update payroll_details set basic_pay=%.2f where employee_id=(select id from employee_payroll where name = '%s');", salary,name);
 		try(Connection connection =this.getConnection()) {
 			Statement statement = connection.createStatement();
 			return statement.executeUpdate(sql);
