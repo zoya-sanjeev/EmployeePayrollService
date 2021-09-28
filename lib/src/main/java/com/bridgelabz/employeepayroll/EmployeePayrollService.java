@@ -10,8 +10,8 @@ public class EmployeePayrollService {
 	
 	public enum IOService{CONSOLE_IO, FILE_IO, DB_IO, REST_IO};
 	
-	private List<EmployeePayrollData> employeePayrollList;
-	private EmployeePayrollDBService employeePayollDBService;
+	private static List<EmployeePayrollData> employeePayrollList;
+	private static EmployeePayrollDBService employeePayollDBService;
 	
 	public EmployeePayrollService() {
 		employeePayollDBService= EmployeePayrollDBService.getInstance();
@@ -116,6 +116,11 @@ public class EmployeePayrollService {
 	public int getCountBasedOnGender(char gender) {
 		int countOfSalaries=employeePayollDBService.getCountBasedOnGender(gender);
 		return countOfSalaries;
+	}
+
+	public static void addEmployeeToPayroll(String name, double salary, LocalDate startDate, char gender) throws EmployeePayrollException, SQLException {
+		employeePayrollList.add(employeePayollDBService.addEmployeeToPayroll(name,salary,startDate, gender));
+		
 	}
 
 	

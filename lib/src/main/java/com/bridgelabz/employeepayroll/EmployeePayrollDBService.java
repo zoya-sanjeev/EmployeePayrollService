@@ -25,9 +25,7 @@ public class EmployeePayrollDBService {
 	private void prepareStatementForEmployeeData()throws EmployeePayrollException {
 		try {
 			Connection connection =this.getConnection();
-			String sql = "select p.employee_id, e.employee_name, p.basic_pay, e.start_date "
-					+ " from employee e, payroll p"
-					+ " where e.employee_id=p.employee_id and e.employee_name=?";
+			String sql = "select * from employee_payroll where name=?;";
 			employeePayrollStatement=connection.prepareStatement(sql);
 		}catch(SQLException e) {
 			throw new EmployeePayrollException(ExceptionType.INVALID_QUERY, "Check query");
@@ -91,9 +89,9 @@ public class EmployeePayrollDBService {
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 		try {
 			while(resultSet.next()) {
-				int id = resultSet.getInt("employee_id");
-				String name = resultSet.getString("employee_name");
-				Double salary=resultSet.getDouble("basic_pay");
+				int id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				Double salary=resultSet.getDouble("salary");
 				LocalDate startDate=resultSet.getDate("start_date").toLocalDate();
 				employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate)); 		
 			}
@@ -118,7 +116,25 @@ public class EmployeePayrollDBService {
 		}
 	}
 	
-	
+	public EmployeePayrollData addEmployeeToPayroll(String name, double salary, LocalDate startDate, char gender) throws EmployeePayrollException, SQLException {
+		int employeeId = -1;
+		EmployeePayrollData employeePayrollData = null;
+		String sql = String.format("insert into employee_payroll(name,salary, start_date,gender)"+ 
+				"values('%s','%s','%s','%c' )", name,salary, Date.valueOf(startDate),gender );
+		try(Connection connection = this.getConnection()){
+			Statement statement = connection.createStatement();
+			int rowAffected = statement.executeUpdate(sql,statement.RETURN_GENERATED_KEYS);
+			if(rowAffected == 1) {
+				ResultSet resultSet = statement.getGeneratedKeys();
+				if(resultSet.next())
+					employeeId = resultSet.getInt(1);
+			}
+			employeePayrollData = new EmployeePayrollData(employeeId, name, salary, startDate);
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return employeePayrollData;
+	}
 
 	public List<EmployeePayrollData> getEmployeesInGivenStartRange(LocalDate startDate, LocalDate endDate) throws EmployeePayrollException {
 		String sql=String.format("select e.employee_id, e.employee_name, p.basic_pay, e.start_date from employee e, payroll p where e.employee_id=p.employee_id and start_date between '%s' and '%s';",Date.valueOf(startDate), Date.valueOf(endDate) );
